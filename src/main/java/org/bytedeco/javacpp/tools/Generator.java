@@ -483,6 +483,15 @@ public class Generator {
             out.println("extern jmethodID JavaCPP_getBytesMID;");
             out.println("extern jmethodID JavaCPP_toStringMID;");
 
+            out.println("#ifdef STRING_BYTES_CHARSET");
+            out.println("#ifdef MODIFIED_UTF8_STRING");
+            out.println("#pragma message (\"warning: STRING_BYTES_CHARSET and MODIFIED_UTF8_STRING are mutually exclusive.\")");
+            out.println("#endif");
+            out.println("extern jobject JavaCPP_stringBytesCharset;");
+            out.println("extern jmethodID JavaCPP_stringWithCharsetMID;");
+            out.println("extern jmethodID JavaCPP_getBytesWithCharsetMID;");
+            out.println("#endif");
+
         // only in javacpp.cpp
         } else {
             out.println("jobject gClassLoader = nullptr;");
@@ -515,17 +524,16 @@ public class Generator {
             out.println("jmethodID JavaCPP_getBytesMID = NULL;");
             out.println("jmethodID JavaCPP_toStringMID = NULL;");
 
-
+            out.println("#ifdef STRING_BYTES_CHARSET");
+            out.println("#ifdef MODIFIED_UTF8_STRING");
+            out.println("#pragma message (\"warning: STRING_BYTES_CHARSET and MODIFIED_UTF8_STRING are mutually exclusive.\")");
+            out.println("#endif");
+            out.println("jobject JavaCPP_stringBytesCharset = NULL;");
+            out.println("jmethodID JavaCPP_stringWithCharsetMID = NULL;");
+            out.println("jmethodID JavaCPP_getBytesWithCharsetMID = NULL;");
+            out.println("#endif");
 
         }
-        out.println("#ifdef STRING_BYTES_CHARSET");
-        out.println("#ifdef MODIFIED_UTF8_STRING");
-        out.println("#pragma message (\"warning: STRING_BYTES_CHARSET and MODIFIED_UTF8_STRING are mutually exclusive.\")");
-        out.println("#endif");
-        out.println("static jobject JavaCPP_stringBytesCharset = NULL;");
-        out.println("static jmethodID JavaCPP_stringWithCharsetMID = NULL;");
-        out.println("static jmethodID JavaCPP_getBytesWithCharsetMID = NULL;");
-        out.println("#endif");
         out.println();
         out.println("static inline void JavaCPP_log(const char* fmt, ...) {");
         out.println("    va_list ap;");
